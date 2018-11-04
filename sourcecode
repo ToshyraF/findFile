@@ -1,0 +1,33 @@
+Sub test()
+    Dim myFile As String, text As String, textline As String, count As Integer, posLong As Integer, Values As Range
+    myFile = "C:\Users\Toshyraf\Desktop\test\bank\temp.txt"
+    
+    PID = Shell("cmd /c cd .. && cd Desktop && dir CMakeLists.txt /s > C:\Users\Toshyraf\Desktop\test\bank\temp.txt", vbNormalFocus)
+    MsgBox "Find File finish"
+    Set Values = Range("A1")
+    Open myFile For Input As #1
+    Dim Path(50) As String
+    count = 0
+    Do Until EOF(1)
+        Line Input #1, textline
+        If InStr(textline, " Directory of ") = 1 Then
+           Path(count) = Split(textline, " ")(3)
+           Values.Value = Split(textline, " ")(3)
+           Set Values = Values.Offset(1)
+           count = count + 1
+        Else
+        End If
+    Loop
+    Range("D1").Value = Path(0)
+    With Range("D1").Validation
+    .Delete
+    .Add Type:=xlValidateList, AlertStyle:=xlValidAlertStop, _
+         Operator:=xlBetween, Formula1:=Join(Path, ",")
+    End With
+   Close #1
+  
+End Sub
+
+Function DropDown(ParamArray a() As Variant) As String
+    
+End Function
